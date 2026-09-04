@@ -13,8 +13,8 @@ class ClassModel extends Model
 
     protected $fillable = [
         'name',
-        'course',
-        'teacher',
+        'course_id',
+        'teacher_id',
         'start_time',
         'end_time',
     ];

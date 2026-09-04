@@ -54,13 +54,15 @@ class StudentController extends Controller
 
         $photo = $request->file('photo')->store('students', 'public');
 
-        Student::create([
+        $student = Student::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'city' => $request->city,
             'photo' => $photo,
         ]);
+
+        $student->courses()->sync($request->courses ?? []);
 
         return redirect('/students')->with('success', 'Student added successfully!');
     }

@@ -21,7 +21,7 @@ class TeacherController extends Controller
         $courses = Course::all();
         $teachers = Teacher::all(); // Yahan Teacher model use karna hai
 
-        return view('classes.create', compact('courses', 'teachers'));
+        return view('teachers.create', compact('courses', 'teachers'));
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class TeacherController extends Controller
         $courses = Course::all();
         $teachers = Teacher::all(); // Yahan bhi Teacher model use karna hai
 
-        return view('classes.edit', compact('class', 'courses', 'teachers'));
+        return view('teachers.edit', compact('teacher', 'courses', 'teachers'));
     }
 
     public function update(Request $request, $id)
