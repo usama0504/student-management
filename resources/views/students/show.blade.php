@@ -1,112 +1,204 @@
 @extends('layouts.app')
 
-@section('title','Student Details')
+@section('title', 'Student Details')
+
+@section('header')
+    <a href="/students" class="btn btn-light btn-sm">← Students</a>
+@endsection
 
 @section('content')
-<div class="container py-5">
-    <div class="card shadow-sm mx-auto border-0" style="max-width:650px;">
-        <div class="card-header bg-primary text-white py-3">
-            <h4 class="mb-0">Student Details</h4>
-            <small>Complete student information</small>
-        </div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg overflow-hidden student-card">
 
-        <div class="card-body p-4">
-            <div class="text-center mb-4">
-                @if($student->photo)
-                    <img src="{{ asset('storage/'.$student->photo) }}"
-                        width="120" height="120"
-                        class="rounded-circle student-photo"
-                        alt="{{ $student->name }}">
-                @else
-                    <img src="{{ asset('images/default-avatar.png') }}"
-                        width="120" height="120"
-                        class="rounded-circle student-photo"
-                        alt="Default Photo">
-                @endif
+                    <div class="profile-header text-white text-center">
+                        @if ($student->photo)
+                            <img src="{{ asset('storage/' . $student->photo) }}" class="student-photo"
+                                alt="{{ $student->name }}">
+                        @else
+                            <img src="{{ asset('images/default-avatar.png') }}" class="student-photo" alt="Default Photo">
+                        @endif
 
-                <h5 class="fw-bold mt-3 mb-1">{{ $student->name }}</h5>
-                <span class="text-muted">Student #{{ $student->id }}</span>
-            </div>
+                        <h2 class="fw-bold mt-3 mb-1">{{ $student->name }}</h2>
 
-            <hr>
+                        <div class="student-id">
+                            Student ID #{{ $student->id }}
+                        </div>
+                    </div>
 
-            <div class="info-row">
-                <strong>ID</strong>
-                <span>#{{ $student->id }}</span>
-            </div>
+                    <div class="card-body p-4 p-md-5">
 
-            <div class="info-row">
-                <strong>Name</strong>
-                <span>{{ $student->name }}</span>
-            </div>
+                        <h5 class="fw-bold mb-3">Student Information</h5>
 
-            <div class="info-row">
-                <strong>Email</strong>
-                <span>{{ $student->email }}</span>
-            </div>
+                        <div class="row g-3">
 
-            <div class="info-row">
-                <strong>Phone</strong>
-                <span>{{ $student->phone }}</span>
-            </div>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <span class="info-icon">✉️</span>
+                                    <div>
+                                        <small class="text-muted d-block">Email</small>
+                                        <strong class="text-break">{{ $student->email }}</strong>
+                                    </div>
+                                </div>
+                            </div>
 
-            <div class="info-row">
-                <strong>City</strong>
-                <span class="badge bg-light text-dark border">
-                    {{ $student->city }}
-                </span>
-            </div>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <span class="info-icon">📱</span>
+                                    <div>
+                                        <small class="text-muted d-block">Phone</small>
+                                        <strong>{{ $student->phone }}</strong>
+                                    </div>
+                                </div>
+                            </div>
 
-            <hr>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <span class="info-icon">📍</span>
+                                    <div>
+                                        <small class="text-muted d-block">City</small>
+                                        <strong>{{ $student->city }}</strong>
+                                    </div>
+                                </div>
+                            </div>
 
-            <div class="mb-3">
-                <strong>Courses</strong>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <span class="info-icon">📚</span>
+                                    <div>
+                                        <small class="text-muted d-block">Courses</small>
+                                        <strong>{{ $student->courses->count() }} Enrolled</strong>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div class="mt-2">
-                    @if($student->courses->count())
-                        @foreach($student->courses as $course)
-                            <span class="badge bg-primary me-1 mb-1">
-                                {{ $course->name }}
-                            </span>
-                        @endforeach
-                    @else
-                        <span class="text-muted">No course assigned.</span>
-                    @endif
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="fw-bold mb-3">Enrolled Courses</h5>
+
+                        @if ($student->courses->count())
+                            <div class="course-list">
+                                @foreach ($student->courses as $course)
+                                    <div class="course-item">
+                                        <span>📚</span>
+                                        <strong>{{ $course->name }}</strong>
+                                        <small class="text-muted ms-auto">
+                                            {{ $course->duration }}
+                                        </small>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center text-muted bg-light p-4 rounded">
+                                No course assigned.
+                            </div>
+                        @endif
+
+                        <div class="d-flex gap-2 mt-4 pt-3 border-top">
+
+                            @if (request('from') == 'dashboard')
+                                <a href="/dashboard" class="btn btn-outline-secondary">
+                                    ← Back
+                                </a>
+                            @else
+                                <a href="/students" class="btn btn-outline-secondary">
+                                    ← Back
+                                </a>
+                            @endif
+
+                            <a href="/students/{{ $student->id }}/edit" class="btn btn-warning">
+                                ✏️ Edit Student
+                            </a>
+
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-
-            <div class="d-flex gap-2 mt-4">
-                @if(request('from') == 'dashboard')
-                    <a href="/dashboard" class="btn btn-secondary">Back</a>
-                @else
-                    <a href="/students" class="btn btn-secondary">Back</a>
-                @endif
-
-                <a href="/students/{{ $student->id }}/edit"
-                    class="btn btn-warning">
-                    Edit Student
-                </a>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 <style>
-.student-photo {
-    object-fit:cover;
-    border:3px solid #dee2e6;
-}
+    .student-card {
+        border-radius: 18px
+    }
 
-.info-row {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 0;
-    border-bottom:1px solid #f1f1f1;
-}
+    .profile-header {
+        background: linear-gradient(135deg, #0d6efd, #084298);
+        padding: 35px 20px
+    }
 
-.info-row strong {
-    color:#495057;
-}
+    .student-photo {
+        width: 125px;
+        height: 125px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 5px solid white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .2)
+    }
+
+    .info-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+        background: #f8f9fa;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        height: 100%
+    }
+
+    .info-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 10px;
+        font-size: 18px;
+        flex-shrink: 0
+    }
+
+    .student-id {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 5px 12px;
+        background: rgba(255, 255, 255, .18);
+        border: 1px solid rgba(255, 255, 255, .3);
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .course-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .course-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: #f8f9fa;
+        border: 1px solid #eee;
+        border-radius: 10px
+    }
+
+    @media(max-width:576px) {
+        .student-photo {
+            width: 110px;
+            height: 110px
+        }
+
+        .card-body {
+            padding: 25px !important
+        }
+    }
 </style>
